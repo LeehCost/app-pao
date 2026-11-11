@@ -1,4 +1,4 @@
-export const theme = {
+export const theme = { //tema de cores e espaçamento do app, usado em todos os arquivos de estilo
   colors: {
     background: "#FFF8EF",
     cardBackground: "#F5E4D0",

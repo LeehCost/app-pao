@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"; //estilos para a tela home, constantes de cores e tamanhos são definidos no arquivo theme.js
 
 export const styles = StyleSheet.create({
   tela: {
