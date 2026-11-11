@@ -16,5 +16,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "src/app/home.js", "src/app/(tabs)/_layout.js"  ]
+, "src/app/home.js", "src/app/(tabs)/_layout.js", "src/components/themed-view.js", "src/components/hint-row.js", "src/components/themed-text.js", "src/components/app-tabs.web.js", "src/components/external-link.js", "src/components/app-tabs.js", "src/components/animated-icon.web.js", "src/components/animated-icon.js"  ]
 }
