@@ -1,23 +1,17 @@
-
 import { View, Text } from "react-native";
+import { styles } from "../../styles/pedidos.styles";
 
 export default function Pedidos() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#FFF8EF",
-      }}
-    >
-      <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+    <View style={styles.container}>
+      <Text style={styles.title}>
         Pedidos
       </Text>
 
-      <Text>
+      <Text style={styles.subtitle}>
         pedidos ebaa
       </Text>
     </View>
   );
 }
+

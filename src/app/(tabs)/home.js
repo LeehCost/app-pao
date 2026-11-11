@@ -1,44 +1,19 @@
-
 import { View, Text } from "react-native"; //layout
+import { styles } from "../../styles/home.styles"; //estilos da tela home
 
 export default function Home() {
   return (
-    <View //estiliza a tela inteira
-      style={{
-        flex: 1,
-        padding: 20,
-        backgroundColor: "#FFF8EF",
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 28,
-          fontWeight: "bold",
-          color: "#8B4513",
-          marginBottom: 10,
-        }}
-      >
+    <View style={styles.tela}>
+      <Text style={styles.titulo}>
         Pão Doca
       </Text>
 
-      <Text
-        style={{
-          fontSize: 16,
-          marginBottom: 25,
-        }}
-      >
+      <Text style={styles.subtitulo}>
         Sistema - Padaria
       </Text>
 
-      <View
-        style={{
-          backgroundColor: "#F5E4D0",
-          padding: 20,
-          borderRadius: 10,
-          marginBottom: 15,
-        }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+      <View style={styles.card}>
+        <Text style={styles.tituloCard}>
           Controle de estoque
         </Text>
 
@@ -47,15 +22,8 @@ export default function Home() {
         </Text>
       </View>
 
-      <View
-        style={{
-          backgroundColor: "#F5E4D0",
-          padding: 20,
-          borderRadius: 10,
-          marginBottom: 15,
-        }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+      <View style={styles.card}>
+        <Text style={styles.tituloCard}>
           Pedidos
         </Text>
 
@@ -64,14 +32,8 @@ export default function Home() {
         </Text>
       </View>
 
-      <View
-        style={{
-          backgroundColor: "#F5E4D0",
-          padding: 20,
-          borderRadius: 10,
-        }}
-      >
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+      <View style={styles.cardUltimo}>
+        <Text style={styles.tituloCard}>
           Temporizador
         </Text>
 

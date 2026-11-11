@@ -1,19 +1,11 @@
 import { Tabs } from "expo-router"; //importação para a naveg em abas
 import { MaterialIcons } from "@expo/vector-icons"; //icones prontos, facilitou mucho ps: baixar bibliotecas
+import { tabScreenOptions } from "../../styles/tabs.styles"; //importando as config visuais das abas
 
 export default function TabLayout() { //definindo o componente de lyt em abas
   return (
     <Tabs
-      screenOptions={{ //colocando as config de todas as abas, caso as confi visuais
-        headerShown: true, //p exibir uma barra coom o titulo em todos os topos nas telas
-        tabBarActiveTintColor: "#B85C38", //esse comando define a cor do icone e do text qnd é selecionada
-        tabBarInactiveTintColor: "#777777", //inverso cor qnd nao está selecionado
-        tabBarStyle: { //estilo da barra, cor de fundo e espaçamento interno ebaa = barra inferior
-          backgroundColor: "#FFF8EF",
-          height: 60,
-          paddingBottom: 6,
-        },
-      }}
+      screenOptions={tabScreenOptions} //colocando as config de todas as abas, no caso as confi visuais
     >
       <Tabs.Screen
         name="home" //liga a aba ao arq home

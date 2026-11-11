@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native"; //componentes visuais do react-native
 import { useRouter } from "expo-router"; //hook do expo-router para navegação entre telas
+import { styles } from "../styles/login.styles"; //importando os estilos da tela de login
 
 export default function Login() { //cria e inicializa a tela de login
   const router = useRouter(); //inicializa o hook de navegação
@@ -16,81 +17,36 @@ export default function Login() { //cria e inicializa a tela de login
   };
 
   return (
-    <View //chatice de estilização
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        padding: 20,
-        backgroundColor: "#FFF8EF",
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 32,
-          fontWeight: "bold",
-          color: "#8B4513",
-          textAlign: "center",
-          marginBottom: 10,
-        }}
-      >
+    <View style={styles.tela}>
+      <Text style={styles.titulo}>
         Pão Doca
       </Text>
 
-      <Text
-        style={{
-          fontSize: 16,
-          color: "#777777",
-          textAlign: "center",
-          marginBottom: 40,
-        }}
-      >
+      <Text style={styles.subtitulo}>
         selecione o seu cargo e digite a senha de acesso ebaa
       </Text>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginBottom: 25,
-        }}
-      >
+      <View style={styles.areaBotoes}>
         <TouchableOpacity //criação do botao de funcionário, muda a cor do botão e do texto dependendo se o cargo é funcionário ou gerente
           onPress={() => setCargo("funcionario")}
-          style={{
-            flex: 1,
-            backgroundColor: cargo === "funcionario" ? "#B85C38" : "#F5E4D0",
-            padding: 15,
-            borderRadius: 8,
-            marginRight: 10,
-            alignItems: "center",
-          }}
+          style={cargo === "funcionario" ? styles.botaoSelecionado : styles.botaoNormal}
         >
           <Text 
-            style={{
-              color: cargo === "funcionario" ? "#FFFFFF" : "#8B4513",
-              fontWeight: "bold",
-            }}
+            style={cargo === "funcionario" ? styles.textoSelecionado : styles.textoNormal}
           >
             Funcionário
           </Text>
         </TouchableOpacity>
 
+        {/* Espaço simples entre os dois botões */}
+        <View style={{ width: 20 }} />
+
         <TouchableOpacity //criação do botao de gerente, muda a cor do botão e do texto dependendo se o cargo é funcionário ou gerente
           onPress={() => setCargo("gerente")}
-          style={{
-            flex: 1,
-            backgroundColor: cargo === "gerente" ? "#B85C38" : "#F5E4D0",
-            padding: 15,
-            borderRadius: 8,
-            marginLeft: 10,
-            alignItems: "center",
-          }}
+          style={cargo === "gerente" ? styles.botaoSelecionado : styles.botaoNormal}
         >
           <Text
-            style={{
-              color: cargo === "gerente" ? "#FFFFFF" : "#8B4513",
-              fontWeight: "bold",
-            }}
+            style={cargo === "gerente" ? styles.textoSelecionado : styles.textoNormal}
           >
             Gerente
           </Text>
@@ -105,28 +61,14 @@ export default function Login() { //cria e inicializa a tela de login
         value={senha}
         onChangeText={setSenha}
         keyboardType="numeric"
-        style={{
-          backgroundColor: "#FFFFFF",
-          borderWidth: 1,
-          borderColor: "#F5E4D0",
-          borderRadius: 8,
-          padding: 15,
-          fontSize: 16,
-          marginBottom: 25,
-          color: "#000000",
-        }}
+        style={styles.campoSenha}
       />
 
       <TouchableOpacity //botão de login, chama a função lidarComLogin quando clicado, estilização do botão e do texto
         onPress={lidarComLogin}
-        style={{
-          backgroundColor: "#8B4513",
-          padding: 16,
-          borderRadius: 8,
-          alignItems: "center",
-        }}
+        style={styles.botaoEntrar}
       >
-        <Text style={{ color: "#FFFFFF", fontSize: 18, fontWeight: "bold" }}>
+        <Text style={styles.textoBotaoEntrar}>
           Entrar
         </Text>
       </TouchableOpacity>
