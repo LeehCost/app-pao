@@ -17,7 +17,7 @@ export default function TabLayout() { //definindo o componente de lyt em abas
           ),
         }}
       />
-      <Tabs.Screen
+      <Tabs.Screen //tambem liga a aba ao arq estoque, mas com icone diferente e titulo diferente
         name="estoque"
         options={{
           title: "Estoque",

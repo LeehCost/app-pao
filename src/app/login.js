@@ -37,8 +37,8 @@ export default function Login() { //cria e inicializa a tela de login
             Funcionário
           </Text>
         </TouchableOpacity>
-
-        {/* Espaço simples entre os dois botões */}
+         
+        {} 
         <View style={{ width: 20 }} />
 
         <TouchableOpacity //criação do botao de gerente, muda a cor do botão e do texto dependendo se o cargo é funcionário ou gerente
