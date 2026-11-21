@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { styles } from "../../styles/perfil.styles";
+import { styles } from "../../../styles/perfil.styles";
 //logoff ou gerente com funções ouuuu seila
 export default function Perfil() {
   return (
