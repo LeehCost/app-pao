@@ -1,5 +1,5 @@
 import { View, Text } from "react-native"; //layout
-import { styles } from "../../styles/home.styles"; //estilos da tela home
+import { styles } from "../../../styles/home.styles"; //estilos da tela home
 
 export default function Home() {
   return (

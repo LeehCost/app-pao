@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { styles } from "../../styles/pedidos.styles";
+import { styles } from "../../../styles/pedidos.styles";
 
 export default function Pedidos() {
   return (

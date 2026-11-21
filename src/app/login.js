@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native"; //componentes visuais do react-native
 import { useRouter } from "expo-router"; //hook do expo-router para navegação entre telas
-import { styles } from "../styles/login.styles"; //importando os estilos da tela de login
+import { styles } from "../../styles/login.styles"; //importando os estilos da tela de login
 
 export default function Login() { //cria e inicializa a tela de login
   const router = useRouter(); //inicializa o hook de navegação
