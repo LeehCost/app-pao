@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router"; //importação para a naveg em abas
 import { MaterialIcons } from "@expo/vector-icons"; //icones prontos, facilitou mucho ps: baixar bibliotecas
-import { tabScreenOptions } from "../../styles/tabs.styles"; //importando as config visuais das abas
+import { tabScreenOptions } from "../../styles/tabs.styles.js"; //importando as config visuais das abas
 
 export default function TabLayout() { //definindo o componente de lyt em abas
   return (
