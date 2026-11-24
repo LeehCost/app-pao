@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
-import { styles } from "../../styles/pedidos.styles";
+import { styles } from "../../styles/temporizador.styles";
 
-export default function Pedidos() {
+export default function Temporizador() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>

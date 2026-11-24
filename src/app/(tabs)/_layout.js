@@ -1,42 +1,54 @@
-import { Tabs } from "expo-router"; //importação para a naveg em abas
-import { MaterialIcons } from "@expo/vector-icons"; //icones prontos, facilitou mucho ps: baixar bibliotecas
-import { tabScreenOptions } from "../../styles/tabs.styles.js"; //importando as config visuais das abas
+import { Tabs } from "expo-router";
+import { MaterialIcons } from "@expo/vector-icons";
+import { tabScreenOptions } from "../../styles/tabs.styles.js";
 
-export default function TabLayout() { //definindo o componente de lyt em abas
+export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={tabScreenOptions} //colocando as config de todas as abas, no caso as confi visuais
-    >
+    <Tabs screenOptions={tabScreenOptions}>
       <Tabs.Screen
-        name="home" //liga a aba ao arq home
-        options={{ //coloca as config dessa aba, titulo, texto/legenda
+        name="home"
+        options={{
           title: "Início",
           tabBarLabel: "Início",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="home" size={size} color={color} /> //desenho do icone e tudo automatizado especificado na ultima linha
+            <MaterialIcons name="home" size={size} color={color} />
           ),
         }}
       />
-      <Tabs.Screen //tambem liga a aba ao arq estoque, mas com icone diferente e titulo diferente
-        name="estoque"
-        options={{
-          title: "Estoque",
-          tabBarLabel: "Estoque",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="inventory" size={size} color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
-        name="pedidos"
+        name="producao"
         options={{
-          title: "Pedidos",
-          tabBarLabel: "Pedidos",
+          title: "Produção",
+          tabBarLabel: "Produção",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="receipt" size={size} color={color} />
+            <MaterialIcons name="bakery-dining" size={size} color={color} />
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="temporizador"
+        options={{
+          title: "Temporizador",
+          tabBarLabel: "Forno",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="timer" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="tarefas"
+        options={{
+          title: "Tarefas",
+          tabBarLabel: "Tarefas",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="checklist" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="perfil"
         options={{
