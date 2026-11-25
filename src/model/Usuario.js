@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export class Usuario {
-  constructor(cargo, email) {
-    this.cargo = cargo;
+  constructor(turno, email) {
+    this.turno = turno;
     this.email = email;
   }
 
@@ -10,7 +10,7 @@ export class Usuario {
     const resp = await axios.get("https://servidor/Usuarios");
     return resp.data.map((item) => {
       const obj = JSON.parse(item);
-      return new Usuario(obj.cargo, obj.email);
+      return new Usuario(obj.turno, obj.email);
     });
   }
 }
