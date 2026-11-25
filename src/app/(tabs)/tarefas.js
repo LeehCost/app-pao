@@ -42,6 +42,7 @@ export default function Tarefas() {
     buscarTarefas();
   }
 
+
   async function marcarConcluida(item) {
     await updateDoc(doc(db, "tarefas", item.id), {
       concluida: !item.concluida,

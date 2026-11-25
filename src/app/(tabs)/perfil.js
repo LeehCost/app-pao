@@ -6,7 +6,6 @@ import { styles } from "../../styles/app.styles";
 
 export default function Perfil() {
   const router = useRouter();
-  const ambienteAtual = process.env.EXPO_PUBLIC_AMBIENTE || "DEV";
 
   function sairDoApp() {
     router.replace("/login");
@@ -30,11 +29,6 @@ export default function Perfil() {
       <View style={styles.card}>
         <Text style={styles.cardTitulo}>Status do Servidor</Text>
         <Text style={styles.cardTexto}>Conectado (Firebase)</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.cardTitulo}>Ambiente Ativo</Text>
-        <Text style={styles.cardTexto}>{ambienteAtual}</Text>
       </View>
 
       <TouchableOpacity

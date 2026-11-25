@@ -1,63 +1,63 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
-import { styles } from "../../styles/app.styles";
+import AsyncStorage from "@react-native-async-storage/async-storage"; //armazenamento local(offline first
+import { collection, addDoc, getDocs } from "firebase/firestore"; //salvar e ler do firebase
+import { db } from "../../services/firebaseConfig"; //conexao configurada com o firebase
+import { styles } from "../../styles/app.styles"; 
 
 export default function Producao() {
-  const [nomePao, setNomePao] = useState("");
+  const [nomePao, setNomePao] = useState(""); //guarda o nome digitado
   const [quantidade, setQuantidade] = useState("");
-  const [listaProducao, setListaProducao] = useState([]);
+  const [listaProducao, setListaProducao] = useState([]); //guarda a lista de todos os paes que aparecem na tela
 
-  async function buscarProducao() {
+  async function buscarProducao() { //função que busca os paes salvos(primeiro nuvem, depois no cel se estiver offline)
     try {
-      const dados = await getDocs(collection(db, "producao"));
-      const itens = dados.docs.map((doc) => ({
+      const dados = await getDocs(collection(db, "producao")); //vai no firebase e pega todos os itens da coleção producao 
+      const itens = dados.docs.map((doc) => ({ //transformação dos docs do firebase em um obj para a lista
         id: doc.id,
         nome: doc.data().nome,
         quantidade: doc.data().quantidade,
       }));
-      setListaProducao(itens);
-      await AsyncStorage.setItem("@producao_offline", JSON.stringify(itens));
-    } catch (erro) {
-      const dadosLocais = await AsyncStorage.getItem("@producao_offline");
-      if (dadosLocais !== null) {
+      setListaProducao(itens); //atualiza a lista na tela com os dados da nuvem
+      await AsyncStorage.setItem("@producao_offline", JSON.stringify(itens)); //salva uma cópia no celular, para uso offline
+    } catch (erro) { //se estiver sem net e der erro no firebase
+      const dadosLocais = await AsyncStorage.getItem("@producao_offline"); //buscador para a ultima copia salva no cel
+      if (dadosLocais !== null) { //se existir copia salva no cel, converte o texto pra lista e exibe
         setListaProducao(JSON.parse(dadosLocais));
       }
     }
   }
 
-  useEffect(() => {
-    buscarProducao();
+  useEffect(() => { // hook que roda automaticamente uma unica vez assim que a tela for aberta
+    buscarProducao(); //chama a função pra carregar a lista inicial
   }, []);
 
-  async function adicionarItem() {
-    if (nomePao === "" || quantidade === "") {
-      Alert.alert("Aviso!", "Preencha o nome do pão e a quantidade!");
+  async function adicionarItem() { //função executada ao clicar em add item
+    if (nomePao === "" || quantidade === "") { //verifica se algum campo está vazio
+      Alert.alert("Aviso!", "Preencha o nome do pão e a quantidade!"); //aviso caso esteja
       return;
     }
 
-    const novoItem = {
+    const novoItem = { //criação do obj do novo pao com um id temporario baseado no horario da ação
       id: Date.now().toString(),
       nome: nomePao,
       quantidade: quantidade,
     };
 
-    const novaLista = [...listaProducao, novoItem];
-    setListaProducao(novaLista);
-    await AsyncStorage.setItem("@producao_offline", JSON.stringify(novaLista));
-
-    setNomePao("");
+    const novaLista = [...listaProducao, novoItem]; //junta a lista atual com o item adicionado
+    setListaProducao(novaLista); //atualização imediata da tela
+    await AsyncStorage.setItem("@producao_offline", JSON.stringify(novaLista)); //salva a lista atualizada no cel
+//limpeza dos campos
+    setNomePao(""); 
     setQuantidade("");
 
-    try {
-      await addDoc(collection(db, "producao"), {
+    try { 
+      await addDoc(collection(db, "producao"), { //envio do novo item para o firebase
         nome: novoItem.nome,
         quantidade: novoItem.quantidade,
       });
-    } catch (erro) {
+    } catch (erro) { //se estiver sem net na hora de salvar
       Alert.alert("Aviso!", "Salvo no celular (Modo Offline)!");
     }
   }
@@ -87,14 +87,14 @@ export default function Producao() {
         style={styles.input}
       />
 
-      <TouchableOpacity onPress={adicionarItem} style={styles.botao}>
+      <TouchableOpacity onPress={adicionarItem} style={styles.botao}> 
         <Text style={styles.textoBotao}>Adicionar à Produção</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
 
-      <FlatList
-        data={listaProducao}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+      <FlatList //lista que coloca cada item de produção na tela
+        data={listaProducao} //fonte dos dados
+        keyExtractor={(item) => item.id} //identificador unico de cada um dos itens
+        renderItem={({ item }) => ( //estilização de cada item da tela
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>{item.nome}</Text>
             <Text style={styles.cardTexto}>{item.quantidade} un.</Text>
@@ -104,3 +104,4 @@ export default function Producao() {
     </View>
   );
 }
+//itens da flatlist data=fonte, keyextractor retorna em uma unica chave de string para cada elemento otimizado e renderizado, renderitem tira o item, index e o separators e retorna em jsx para cada item.
