@@ -10,7 +10,7 @@ export default function Tarefas() {
   const [responsavel, setResponsavel] = useState("");
   const [listaTarefas, setListaTarefas] = useState([]);
 
-  const buscarTarefas = async () => {
+  async function buscarTarefas() {
     const dados = await getDocs(collection(db, "tarefas"));
     const itens = dados.docs.map((item) => ({
       id: item.id,
@@ -19,15 +19,15 @@ export default function Tarefas() {
       concluida: item.data().concluida,
     }));
     setListaTarefas(itens);
-  };
+  }
 
   useEffect(() => {
     buscarTarefas();
   }, []);
 
-  const adicionarTarefa = async () => {
+  async function adicionarTarefa() {
     if (tarefa === "" || responsavel === "") {
-      Alert.alert("Pão Doca", "Preencha a tarefa e o responsável!");
+      Alert.alert("Aviso!", "Preencha a tarefa e o responsável!");
       return;
     }
 
@@ -40,14 +40,14 @@ export default function Tarefas() {
     setTarefa("");
     setResponsavel("");
     buscarTarefas();
-  };
+  }
 
-  const marcarConcluida = async (item) => {
+  async function marcarConcluida(item) {
     await updateDoc(doc(db, "tarefas", item.id), {
       concluida: !item.concluida,
     });
     buscarTarefas();
-  };
+  }
 
   return (
     <View style={styles.container}>

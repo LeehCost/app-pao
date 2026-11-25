@@ -21,17 +21,17 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="home"
-        options={{
-          title: "Início",
+        options={{ //importante ressaltar: mesmo o header estando em false, o sistema guarda o title pra utilizar!
+          title: "Início", //title é o titulo interno e o tabbarlabel embaixo do icone
           tabBarLabel: "Início",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="home" size={size} color={color} />
+            <MaterialIcons name="home" size={size} color={color} /> //icone da casinha, e os outros da biblioteca utilizados
           ),
         }}
       />
 
       <Tabs.Screen
-        name="producao"
+        name="producao" //conexao com o arq producao.js e assim, consecutivamente
         options={{
           title: "Produção",
           tabBarLabel: "Produção",

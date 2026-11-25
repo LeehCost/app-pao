@@ -1,70 +1,55 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../../styles/app.styles";
 
 export default function Home() {
-  const [valorSalvar, setValorSalvar] = useState("");
+  const [aviso, setAviso] = useState("");
 
-  const _storeData = async (valorParaSalvar) => {
-    try {
-      await AsyncStorage.setItem("recado_turno", valorParaSalvar);
-      alert("Recado salvo no celular!");
-      setValorSalvar("");
-    } catch (error) {
-      alert(error);
+  async function salvarAviso() {
+    if (aviso === "") {
+      Alert.alert("Pão Doca", "Escreva um aviso antes de salvar!");
+      return;
     }
-  };
+    await AsyncStorage.setItem("recado_turno", aviso);
+    Alert.alert("Pão Doca", "Recado salvo no celular!");
+    setAviso("");
+  }
 
-  const _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("recado_turno");
-      if (value !== null) {
-        alert("Recado salvo: " + value);
-      } else {
-        alert("Nenhum recado salvo ainda.");
-      }
-    } catch (error) {
-      alert(error);
+  async function lerAviso() {
+    const valorSalvo = await AsyncStorage.getItem("recado_turno");
+    if (valorSalvo !== null) {
+      Alert.alert("Último Aviso", valorSalvo);
+    } else {
+      Alert.alert("Pão Doca", "Nenhum recado salvo ainda.");
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Painel Inicial - Pão Doca</Text>
-      <Text style={styles.subtitle}>Quadro de Avisos Offline</Text>
+      <View style={styles.headerCard}>
+        <View>
+          <Text style={styles.headerTitulo}>Painel Inicial</Text>
+          <Text style={styles.headerSubtitulo}>Quadro de avisos do turno</Text>
+        </View>
+        <MaterialIcons name="storefront" size={34} color="#C67C4E" />
+      </View>
 
       <TextInput
-        placeholder="Digite um aviso do turno"
-        value={valorSalvar}
-        onChangeText={setValorSalvar}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 8,
-          padding: 10,
-          width: "100%",
-          backgroundColor: "#fff",
-          marginTop: 20,
-          marginBottom: 15,
-        }}
+        placeholder="Digite um aviso para a equipe..."
+        value={aviso}
+        onChangeText={setAviso}
+        style={styles.input}
       />
 
-      <View style={{ width: "100%", marginBottom: 10 }}>
-        <Button
-          onPress={() => _storeData(valorSalvar)}
-          title="Registrar Aviso"
-          color="#8B4513"
-        />
-      </View>
+      <TouchableOpacity onPress={salvarAviso} style={styles.botao}>
+        <Text style={styles.textoBotao}>Salvar Aviso</Text>
+      </TouchableOpacity>
 
-      <View style={{ width: "100%" }}>
-        <Button
-          onPress={_retrieveData}
-          title="Ler Último Aviso"
-          color="#D2691E"
-        />
-      </View>
+      <TouchableOpacity onPress={lerAviso} style={styles.botaoSecundario}>
+        <Text style={styles.textoBotao}>Ver Último Aviso</Text>
+      </TouchableOpacity>
     </View>
   );
 }

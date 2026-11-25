@@ -14,9 +14,9 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [modo, setModo] = useState("login");
 
-  const lidarComBotao = async () => {
+  async function lidarComBotao() {
     if (email === "" || senha === "") {
-      Alert.alert("Pão Doca", "Preencha o e-mail e a senha!");
+      Alert.alert("Aviso!", "Preencha o e-mail e a senha!");
       return;
     }
 
@@ -28,7 +28,7 @@ export default function Login() {
         email: emailFormatado,
         senha: senhaCriptografada,
       });
-      Alert.alert("Pão Doca", "Conta criada com sucesso!");
+      Alert.alert("Aviso!", "Conta criada com sucesso!");
       setModo("login");
       setSenha("");
     } else if (modo === "esqueci") {
@@ -39,11 +39,11 @@ export default function Login() {
         await updateDoc(doc(db, "usuarios", usuarioDoc.id), {
           senha: senhaCriptografada,
         });
-        Alert.alert("Pão Doca", "Nova senha salva!");
+        Alert.alert("Aviso!", "Nova senha salva!");
         setModo("login");
         setSenha("");
       } else {
-        Alert.alert("Pão Doca", "E-mail não encontrado!");
+        Alert.alert("Aviso!", "E-mail não encontrado!");
       }
     } else {
       const dados = await getDocs(collection(db, "usuarios"));
@@ -56,10 +56,10 @@ export default function Login() {
       if (encontrado) {
         router.replace("/home");
       } else {
-        Alert.alert("Pão Doca", "E-mail ou senha incorretos!");
+        Alert.alert("Aviso!", "E-mail ou senha incorretos!");
       }
     }
-  };
+  }
 
   return (
     <View style={[styles.container, { justifyContent: "center" }]}>
