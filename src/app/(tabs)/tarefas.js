@@ -6,23 +6,23 @@ import { db } from "../../services/firebaseConfig";
 import { styles } from "../../styles/app.styles";
 
 export default function Tarefas() {
-  const [tarefa, setTarefa] = useState("");
-  const [responsavel, setResponsavel] = useState("");
-  const [listaTarefas, setListaTarefas] = useState([]);
+  const [tarefa, setTarefa] = useState(""); //guarda o texto da tarefa digitada
+  const [responsavel, setResponsavel] = useState(""); //guarda o nome do funcionario
+  const [listaTarefas, setListaTarefas] = useState([]); //guarda a lista de tarefas do banco
 
-  async function buscarTarefas() {
-    const dados = await getDocs(collection(db, "tarefas"));
-    const itens = dados.docs.map((item) => ({
+  async function buscarTarefas() { //busca as tarefas salvas no firebase
+    const dados = await getDocs(collection(db, "tarefas")); //mesma coisa, pega todos os itens da coleção
+    const itens = dados.docs.map((item) => ({ //transforma cada document em um obj(mesma coisa)
       id: item.id,
       tarefa: item.data().tarefa,
       responsavel: item.data().responsavel,
       concluida: item.data().concluida,
     }));
-    setListaTarefas(itens);
+    setListaTarefas(itens); //atualiza a lista na tela
   }
 
-  useEffect(() => {
-    buscarTarefas();
+  useEffect(() => { //execução automatica assim que a tela for aberta
+    buscarTarefas(); //carrega no banco
   }, []);
 
   async function adicionarTarefa() {
@@ -36,18 +36,18 @@ export default function Tarefas() {
       responsavel: responsavel,
       concluida: false,
     });
-
+//limpeza
     setTarefa("");
     setResponsavel("");
     buscarTarefas();
   }
 
 
-  async function marcarConcluida(item) {
-    await updateDoc(doc(db, "tarefas", item.id), {
-      concluida: !item.concluida,
+  async function marcarConcluida(item) { //checklist
+    await updateDoc(doc(db, "tarefas", item.id), { //atualiza o doc pelo id no firebase
+      concluida: !item.concluida, //inverte o stts(false pra true e vice-versa)
     });
-    buscarTarefas();
+    buscarTarefas(); //recarrega a lista pra atualizar o risco e o icone
   }
 
   return (
@@ -74,7 +74,7 @@ export default function Tarefas() {
         style={styles.input}
       />
 
-      <TouchableOpacity onPress={adicionarTarefa} style={styles.botao}>
+      <TouchableOpacity onPress={adicionarTarefa} style={styles.botao}> 
         <Text style={styles.textoBotao}>Salvar Tarefa</Text>
       </TouchableOpacity>
 

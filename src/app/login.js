@@ -8,34 +8,34 @@ import { criptografarSenha } from "../utils/crypto";
 import { styles } from "../styles/app.styles";
 
 export default function Login() {
-  const router = useRouter();
-  const [turno, setTurno] = useState("Manhã");
+  const router = useRouter(); //controlador
+  const [turno, setTurno] = useState("Manhã"); //guarda o email, turno e senha
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [modo, setModo] = useState("login");
+  const [modo, setModo] = useState("login"); //controle de qual tela está(login, cadastro ou esqueci)
 
-  async function lidarComBotao() {
-    if (email === "" || senha === "") {
+  async function lidarComBotao() { //funcao ao clicar no botao
+    if (email === "" || senha === "") { //verificação
       Alert.alert("Aviso!", "Preencha o e-mail e a senha!");
       return;
     }
-
+//email em letras minusculas e conversao da senha em codigo base64
     const emailFormatado = email.toLowerCase().trim();
     const senhaCriptografada = criptografarSenha(senha);
 
-    if (modo === "cadastro") {
-      await addDoc(collection(db, "usuarios"), {
+    if (modo === "cadastro") { //conta nova
+      await addDoc(collection(db, "usuarios"), { //grava email e senha já criptografados
         email: emailFormatado,
         senha: senhaCriptografada,
       });
       Alert.alert("Aviso!", "Conta criada com sucesso!");
-      setModo("login");
-      setSenha("");
-    } else if (modo === "esqueci") {
-      const dados = await getDocs(collection(db, "usuarios"));
-      const usuarioDoc = dados.docs.find((d) => d.data().email === emailFormatado);
+      setModo("login");//volta pra tela de login
+      setSenha(""); //limpa o campo 
+    } else if (modo === "esqueci") { //redefinição da senha
+      const dados = await getDocs(collection(db, "usuarios")); //busca os users cadastrados no firebase
+      const usuarioDoc = dados.docs.find((d) => d.data().email === emailFormatado); //procura o doc com o email digitado
 
-      if (usuarioDoc) {
+      if (usuarioDoc) { //se email encontrado no banco, atualiza a senha
         await updateDoc(doc(db, "usuarios", usuarioDoc.id), {
           senha: senhaCriptografada,
         });
@@ -46,17 +46,17 @@ export default function Login() {
         Alert.alert("Aviso!", "E-mail não encontrado!");
       }
     } else {
-      const dados = await getDocs(collection(db, "usuarios"));
-      const listaUsuarios = dados.docs.map((d) => d.data());
+      const dados = await getDocs(collection(db, "usuarios")); //leitura de todos os users do fire
+      const listaUsuarios = dados.docs.map((d) => d.data()); //pega somente email e senha de cada doc
 
       const encontrado = listaUsuarios.find(
-        (u) => u.email === emailFormatado && u.senha === senhaCriptografada
+        (u) => u.email === emailFormatado && u.senha === senhaCriptografada //procura um usuario que tenha exatamente o mesmo email e senha
       );
 
-      if (encontrado) {
-        router.replace("/home");
+      if (encontrado) { //se encontrados
+        router.replace("/home"); //volta pra tela inicial e evita a volta pro login
       } else {
-        Alert.alert("Aviso!", "E-mail ou senha incorretos!");
+        Alert.alert("Aviso!", "E-mail ou senha incorretos!"); //avisa o erro
       }
     }
   }

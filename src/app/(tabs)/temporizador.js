@@ -4,56 +4,56 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { styles } from "../../styles/app.styles";
 
 export default function Temporizador() {
-  const [minutosDigitados, setMinutosDigitados] = useState("");
-  const [segundosRestantes, setSegundosRestantes] = useState(0);
-  const [ativo, setAtivo] = useState(false);
+  const [minutosDigitados, setMinutosDigitados] = useState(""); //guarda os minutos digitados
+  const [segundosRestantes, setSegundosRestantes] = useState(0); //guarda o tempo total da contagem em segundos
+  const [ativo, setAtivo] = useState(false); //controle do cronometro se esta rodando ou parado /true ou false
 
-  useEffect(() => {
+  useEffect(() => { //monitora o cronometro a cada seg quando estiver ativo
     let intervalo = null;
 
-    if (ativo && segundosRestantes > 0) {
-      intervalo = setInterval(() => {
-        setSegundosRestantes((tempoAnterior) => tempoAnterior - 1);
+    if (ativo && segundosRestantes > 0) { //se estiver ligado e ainda faltar tempo
+      intervalo = setInterval(() => { //criação do relogio que roda a cada milissegundo
+        setSegundosRestantes((tempoAnterior) => tempoAnterior - 1); //decrementa um segundo da contagem
       }, 1000);
-    } else if (ativo && segundosRestantes === 0) {
-      setAtivo(false);
-      Vibration.vibrate([500, 500, 500, 500]);
-      Alert.alert("Aviso!", "Tempo esgotado! Os pães estão prontos no forno!");
+    } else if (ativo && segundosRestantes === 0) { //quando chegar a zero
+      setAtivo(false); //desliga o cronometro
+      Vibration.vibrate([500, 500, 500, 500]); //vibra em pulsos
+      Alert.alert("Aviso!", "Tempo esgotado!");
     }
 
-    return () => clearInterval(intervalo);
+    return () => clearInterval(intervalo); //limpa o relogio da memoria para evitar travamentos
   }, [ativo, segundosRestantes]);
 
-  function iniciarTemporizador() {
-    const minutos = parseInt(minutosDigitados);
-    if (!minutos || minutos <= 0) {
+  function iniciarTemporizador() { //quando for clicado iniciar 
+    const minutos = parseInt(minutosDigitados); //conversao do texto digitado para int
+    if (!minutos || minutos <= 0) { //verificação se é maior que zero
       Alert.alert("Aviso!", "Digite um tempo válido em minutos!");
       return;
     }
-    setSegundosRestantes(minutos * 60);
-    setAtivo(true);
+    setSegundosRestantes(minutos * 60); //minutos pra seg
+    setAtivo(true); //inicia a contagem
   }
 
-  function testarAlertaRapido() {
+  function testarAlertaRapido() { //teste
     setSegundosRestantes(5);
     setAtivo(true);
   }
 
   function pararTemporizador() {
-    setAtivo(false);
-    setSegundosRestantes(0);
-    Vibration.cancel();
+    setAtivo(false); //pausa
+    setSegundosRestantes(0); //zera
+    Vibration.cancel(); //para a vibração
   }
 
-  function formatarTempo() {
-    const minutos = Math.floor(segundosRestantes / 60);
-    const segundos = segundosRestantes % 60;
-    const minFormatado = minutos < 10 ? "0" + minutos : minutos;
-    const segFormatado = segundos < 10 ? "0" + segundos : segundos;
-    return `${minFormatado}:${segFormatado}`;
+  function formatarTempo() { //transformação dos segundos totais no formato de relogio
+    const minutos = Math.floor(segundosRestantes / 60); //calculo min
+    const segundos = segundosRestantes % 60; //resto segundos
+    const minFormatado = minutos < 10 ? "0" + minutos : minutos; //add um zero a esquerda se for menor que 10
+    const segFormatado = segundos < 10 ? "0" + segundos : segundos;  //add um zero nos segs
+    return `${minFormatado}:${segFormatado}`;//retorna um texto pro visor
   }
 
-  return (
+  return ( //cabeçalho arredondado em cima
     <View style={styles.container}>
       <View style={styles.headerCard}>
         <View>
