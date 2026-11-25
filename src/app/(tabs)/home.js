@@ -1,45 +1,69 @@
-import { View, Text } from "react-native"; //layout
-import { styles } from "../../styles/home.styles"; //estilos da tela home
+import React, { useState } from "react";
+import { View, Text, TextInput, Button } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { styles } from "../../styles/app.styles";
 
 export default function Home() {
+  const [valorSalvar, setValorSalvar] = useState("");
+
+  const _storeData = async (valorParaSalvar) => {
+    try {
+      await AsyncStorage.setItem("recado_turno", valorParaSalvar);
+      alert("Recado salvo no celular!");
+      setValorSalvar("");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("recado_turno");
+      if (value !== null) {
+        alert("Recado salvo: " + value);
+      } else {
+        alert("Nenhum recado salvo ainda.");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return (
-    <View style={styles.tela}>
-      <Text style={styles.titulo}>
-        Pão Doca
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Painel Inicial - Pão Doca</Text>
+      <Text style={styles.subtitle}>Quadro de Avisos Offline</Text>
 
-      <Text style={styles.subtitulo}>
-        Sistema - Padaria
-      </Text>
+      <TextInput
+        placeholder="Digite um aviso do turno"
+        value={valorSalvar}
+        onChangeText={setValorSalvar}
+        style={{
+          borderWidth: 1,
+          borderColor: "#ccc",
+          borderRadius: 8,
+          padding: 10,
+          width: "100%",
+          backgroundColor: "#fff",
+          marginTop: 20,
+          marginBottom: 15,
+        }}
+      />
 
-      <View style={styles.card}>
-        <Text style={styles.tituloCard}>
-          Controle de estoque
-        </Text>
-
-        <Text>
-          consulta dos produtos
-        </Text>
+      <View style={{ width: "100%", marginBottom: 10 }}>
+        <Button
+          onPress={() => _storeData(valorSalvar)}
+          title="Registrar Aviso"
+          color="#8B4513"
+        />
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.tituloCard}>
-          Pedidos
-        </Text>
-
-        <Text>
-          pedidos aos fornecedores
-        </Text>
-      </View>
-
-      <View style={styles.cardUltimo}>
-        <Text style={styles.tituloCard}>
-          Temporizador
-        </Text>
-
-        <Text>
-          tempo dos troços
-        </Text>
+      <View style={{ width: "100%" }}>
+        <Button
+          onPress={_retrieveData}
+          title="Ler Último Aviso"
+          color="#D2691E"
+        />
       </View>
     </View>
   );
