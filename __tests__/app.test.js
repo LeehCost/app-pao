@@ -25,3 +25,4 @@ test("Teste 2: Deve criptografar a senha usando Base64", () => {
   const senhaCriptografada = criptografarSenha(senhaOriginal);
   expect(senhaCriptografada).toBe("MTIzNA==");
 });
+// jest mock - cria um servidor falso, 

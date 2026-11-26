@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../services/firebaseConfig";
 import { criptografarSenha } from "../utils/crypto";
@@ -9,28 +10,30 @@ import { styles } from "../styles/app.styles";
 
 export default function Login() {
   const router = useRouter(); //controlador
-  const [turno, setTurno] = useState("Manhã"); //guarda o email, turno e senha
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [modo, setModo] = useState("login"); //controle de qual tela está(login, cadastro ou esqueci)
 
   async function lidarComBotao() { //funcao ao clicar no botao
-    if (email === "" || senha === "") { //verificação
-      Alert.alert("Aviso!", "Preencha o e-mail e a senha!");
+    if (email === "" || senha === "" || (modo === "cadastro" && nome === "")) { //verificação
+      Alert.alert("Aviso!", "Preencha todos os campos!");
       return;
     }
-//email em letras minusculas e conversao da senha em codigo base64
+
+    //email em letras minusculas e conversao da senha em codigo base64
     const emailFormatado = email.toLowerCase().trim();
     const senhaCriptografada = criptografarSenha(senha);
 
     if (modo === "cadastro") { //conta nova
-      await addDoc(collection(db, "usuarios"), { //grava email e senha já criptografados
+      await addDoc(collection(db, "usuarios"), { //grava nome, email e senha já criptografados
+        nome: nome.trim(),
         email: emailFormatado,
         senha: senhaCriptografada,
       });
       Alert.alert("Aviso!", "Conta criada com sucesso!");
-      setModo("login");//volta pra tela de login
-      setSenha(""); //limpa o campo 
+      setModo("login"); //volta pra tela de login
+      setSenha(""); //limpa o campo
     } else if (modo === "esqueci") { //redefinição da senha
       const dados = await getDocs(collection(db, "usuarios")); //busca os users cadastrados no firebase
       const usuarioDoc = dados.docs.find((d) => d.data().email === emailFormatado); //procura o doc com o email digitado
@@ -47,13 +50,14 @@ export default function Login() {
       }
     } else {
       const dados = await getDocs(collection(db, "usuarios")); //leitura de todos os users do fire
-      const listaUsuarios = dados.docs.map((d) => d.data()); //pega somente email e senha de cada doc
+      const listaUsuarios = dados.docs.map((d) => d.data()); //pega os dados de cada doc
 
       const encontrado = listaUsuarios.find(
         (u) => u.email === emailFormatado && u.senha === senhaCriptografada //procura um usuario que tenha exatamente o mesmo email e senha
       );
 
       if (encontrado) { //se encontrados
+        await AsyncStorage.setItem("@usuario_nome", encontrado.nome || "Funcionário");
         router.replace("/home"); //volta pra tela inicial e evita a volta pro login
       } else {
         Alert.alert("Aviso!", "E-mail ou senha incorretos!"); //avisa o erro
@@ -71,42 +75,17 @@ export default function Login() {
             ? "Crie sua conta de acesso"
             : modo === "esqueci"
             ? "Digite seu e-mail e a nova senha"
-            : "Controle de Fornadas & Turno"}
+            : "Gestão de Padaria & Forno"}
         </Text>
       </View>
 
-      {modo === "login" ? (
-        <View style={{ flexDirection: "row", marginBottom: 15 }}>
-          <TouchableOpacity
-            onPress={() => setTurno("Manhã")}
-            style={[
-              turno === "Manhã" ? styles.botao : styles.botaoSecundario,
-              { flex: 1, marginRight: 5, marginBottom: 0, padding: 12 },
-            ]}
-          >
-            <Text style={styles.textoBotao}>Manhã</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setTurno("Tarde")}
-            style={[
-              turno === "Tarde" ? styles.botao : styles.botaoSecundario,
-              { flex: 1, marginHorizontal: 5, marginBottom: 0, padding: 12 },
-            ]}
-          >
-            <Text style={styles.textoBotao}>Tarde</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setTurno("Noite")}
-            style={[
-              turno === "Noite" ? styles.botao : styles.botaoSecundario,
-              { flex: 1, marginLeft: 5, marginBottom: 0, padding: 12 },
-            ]}
-          >
-            <Text style={styles.textoBotao}>Noite</Text>
-          </TouchableOpacity>
-        </View>
+      {modo === "cadastro" ? (
+        <TextInput
+          placeholder="Seu nome (ex: Letícia)"
+          value={nome}
+          onChangeText={setNome}
+          style={styles.input}
+        />
       ) : null}
 
       <TextInput
@@ -132,7 +111,7 @@ export default function Login() {
             ? "Cadastrar"
             : modo === "esqueci"
             ? "Redefinir Senha"
-            : "Entrar no Turno (" + turno + ")"}
+            : "Entrar"}
         </Text>
       </TouchableOpacity>
 
