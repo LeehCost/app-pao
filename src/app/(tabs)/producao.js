@@ -209,4 +209,3 @@ export default function Producao() {
     </View>
   );
 }
-//itens da flatlist data=fonte, keyextractor retorna em uma unica chave de string para cada elemento otimizado e renderizado, renderitem tira o item, index e o separators e retorna em jsx para cada item.
