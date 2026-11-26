@@ -12,7 +12,7 @@ export default function Home() {
   const [totalFornadas, setTotalFornadas] = useState(0);
   const [tarefasPendentes, setTarefasPendentes] = useState(0);
   const [insumo, setInsumo] = useState(""); //textinput, guarda o que for digitado
-  const [listaFaltas, setListaFaltas] = useState([]);
+  const [listaFaltas, setListaFaltas] = useState([]); 
 
   useFocusEffect(
     useCallback(() => {
