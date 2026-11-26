@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { styles } from "../../styles/app.styles";
 
@@ -36,12 +36,11 @@ export default function Tarefas() {
       responsavel: responsavel,
       concluida: false,
     });
-//limpeza
+    //limpeza
     setTarefa("");
     setResponsavel("");
     buscarTarefas();
   }
-
 
   async function marcarConcluida(item) { //checklist
     await updateDoc(doc(db, "tarefas", item.id), { //atualiza o doc pelo id no firebase
@@ -49,6 +48,21 @@ export default function Tarefas() {
     });
     buscarTarefas(); //recarrega a lista pra atualizar o risco e o icone
   }
+
+  async function excluirTarefa(id) {
+    await deleteDoc(doc(db, "tarefas", id));
+    buscarTarefas();
+  }
+
+  async function limparConcluidas() {
+    const concluidas = listaTarefas.filter((item) => item.concluida);
+    for (const item of concluidas) {
+      await deleteDoc(doc(db, "tarefas", item.id));
+    }
+    buscarTarefas();
+  }
+
+  const temConcluidas = listaTarefas.some((item) => item.concluida);
 
   return (
     <View style={styles.container}>
@@ -74,35 +88,55 @@ export default function Tarefas() {
         style={styles.input}
       />
 
-      <TouchableOpacity onPress={adicionarTarefa} style={styles.botao}> 
+      <TouchableOpacity onPress={adicionarTarefa} style={styles.botao}>
         <Text style={styles.textoBotao}>Salvar Tarefa</Text>
       </TouchableOpacity>
+
+      {temConcluidas ? (
+        <TouchableOpacity
+          onPress={limparConcluidas}
+          style={{ alignSelf: "flex-end", marginBottom: 10 }}
+        >
+          <Text style={{ color: "#A52A2A", fontWeight: "bold", fontSize: 14 }}>
+            Limpar Concluídas
+          </Text>
+        </TouchableOpacity>
+      ) : null}
 
       <FlatList
         data={listaTarefas}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => marcarConcluida(item)} style={styles.card}>
-            <View>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                  color: item.concluida ? "#999" : "#2F2D2C",
-                  textDecorationLine: item.concluida ? "line-through" : "none",
-                }}
-              >
-                {item.tarefa}
-              </Text>
-              <Text style={styles.cardTexto}>Responsável: {item.responsavel}</Text>
-            </View>
+          <View style={styles.card}>
+            <TouchableOpacity
+              onPress={() => marcarConcluida(item)}
+              style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+            >
+              <MaterialIcons
+                name={item.concluida ? "check-box" : "check-box-outline-blank"}
+                size={26}
+                color={item.concluida ? "#2E7D32" : "#C67C4E"}
+                style={{ marginRight: 12 }}
+              />
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "bold",
+                    color: item.concluida ? "#999" : "#2F2D2C",
+                    textDecorationLine: item.concluida ? "line-through" : "none",
+                  }}
+                >
+                  {item.tarefa}
+                </Text>
+                <Text style={styles.cardTexto}>Responsável: {item.responsavel}</Text>
+              </View>
+            </TouchableOpacity>
 
-            <MaterialIcons
-              name={item.concluida ? "check-box" : "check-box-outline-blank"}
-              size={26}
-              color={item.concluida ? "#2E7D32" : "#C67C4E"}
-            />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => excluirTarefa(item.id)}>
+              <MaterialIcons name="delete-outline" size={24} color="#A52A2A" />
+            </TouchableOpacity>
+          </View>
         )}
       />
     </View>

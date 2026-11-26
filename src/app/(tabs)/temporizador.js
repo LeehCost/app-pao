@@ -16,8 +16,12 @@ export default function Temporizador() {
           if (item.ativo && item.restante > 1) { //se estiver ligado e ainda faltar tempo
             return { ...item, restante: item.restante - 1 }; //decrementa um segundo da contagem
           } else if (item.ativo && item.restante === 1) { //quando chegar a zero
-            Vibration.vibrate([500, 500, 500, 500, 500, 500]); //vibra em pulsos
-            Alert.alert("Aviso!", `Tempo esgotado: ${item.nome} está pronto!`);
+            Vibration.vibrate(true); //vibra em pulsos
+            Alert.alert(
+              "Aviso!",
+              `Tempo esgotado: ${item.nome} está pronto!`,
+              [{ text: "OK", onPress: () => Vibration.cancel() }]
+            );
             return { ...item, restante: 0, ativo: false }; //desliga o cronometro
           }
           return item;
